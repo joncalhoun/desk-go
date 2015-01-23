@@ -28,10 +28,6 @@ var Subdomain string
 var backend *Backend
 var httpClient = &http.Client{Timeout: defaultHTTPTimeout}
 
-// type Backend interface {
-// 	Call(method, path, subdomain, username, password string, body *url.Values, v interface{}) error
-// }
-
 func GetBackend() *Backend {
 	if backend == nil {
 		backend = &Backend{httpClient}
@@ -125,5 +121,3 @@ func (bc Backend) NewRequest(method, path, subdomain, username, password string,
 
 	return req, nil
 }
-
-// func (s Backend) Call(method, path, username, password string, form *url.Values, params *Params)
