@@ -4,7 +4,6 @@ import (
 	"log"
 	"regexp"
 	"net/url"
-	"strconv"
 )
 
 var caseIdRegexp = regexp.MustCompile(".*/cases/([0-9]+)$")
@@ -20,30 +19,46 @@ type Case struct {
 }
 
 type CaseListParams struct {
-	Page, PerPage int
-	SortField, SortDirection string
+	ListParams
 }
 
 func (c CaseListParams) UrlValues() *url.Values {
-	ret := &url.Values{}
+	ret := url.Values{}
+	c.ListParams.UrlValues(&ret)
+	return &ret
+}
 
-	if c.Page > 0 {
-		ret.Add("page", strconv.Itoa(c.Page))
+
+type CaseSearchParams struct {
+	// If q is provided, it will be used exclusively and all other search params will be ignored.
+	// See http://dev.desk.com/API/cases/#search for more info
+	Q string
+	// These are ignored if Q has any value
+	// See http://dev.desk.com/API/cases/#search under the heading "Other Search Parameters"
+	Options map[string]string
+	ListParams
+}
+
+func (c CaseSearchParams) UrlValues() *url.Values {
+	ret := url.Values{}
+
+	if c.Q != "" {
+		ret.Add("q", c.Q)
+	} else if len(c.Options) > 0 {
+		for key, value := range c.Options {
+			ret.Add(key, value)
+		}
 	}
 
-	if c.PerPage > 0 {
-		ret.Add("per_page", strconv.Itoa(c.PerPage))
-	}
+	c.ListParams.UrlValues(&ret)
+	return &ret
+}
 
-	if c.SortField != "" {
-		ret.Add("sort_field", c.SortField)
+func (c *CaseSearchParams) AddOption(key, value string) {
+	if c.Options == nil {
+		c.Options = make(map[string]string)
 	}
-
-	if c.SortDirection != "" {
-		ret.Add("sort_direction", c.SortDirection)
-	}
-
-	return ret
+	c.Options[key] = value
 }
 
 type RawCases struct {

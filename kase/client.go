@@ -28,6 +28,20 @@ func (c Client) List(params *desk.CaseListParams) ([]desk.Case, error) {
 	return desk.ParseRawCases(&rawCases), nil
 }
 
+func Search(params *desk.CaseSearchParams) ([]desk.Case, error) {
+	return getC().Search(params)
+}
+
+func (c Client) Search(params *desk.CaseSearchParams) ([]desk.Case, error) {
+	rawCases := desk.RawCases{}
+	path := "/cases/search"
+	err := c.Call("GET", path, c.Subdomain, c.Username, c.Password, params.UrlValues(), &rawCases)
+	if err != nil {
+		return nil, err
+	}
+	return desk.ParseRawCases(&rawCases), nil
+}
+
 func Get(id int) (*desk.Case, error) {
 	return getC().Get(id)
 }

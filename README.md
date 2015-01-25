@@ -49,5 +49,34 @@ func main() {
         panic(err)
     }
     fmt.Printf("%+v", cs)
+
+
+    searchParams := desk.CaseSearchParams{}
+    searchParams.Page = 1
+    searchParams.PerPage = 5
+    searchParams.SortDirection = "desc"
+    searchParams.SortField = "created_at"
+
+    // See http://dev.desk.com/API/cases/#search for difference between using Q
+    // and using optional search params (called options here)
+
+    // Using Q
+    searchParams.Q = "case_id:1,2"
+    cs, err := kase.Search(&searchParams)
+    if err != nil {
+        panic(err)
+    }
+    fmt.Printf("%+v", cs)
+
+    // Not using Q
+    searchParams.Q = ""
+    searchParams.AddOption("since_id", "1")
+    cs, err = kase.Search(&searchParams)
+    if err != nil {
+        panic(err)
+    }
+    fmt.Printf("%+v", cs)
+
+
 }
 ```
