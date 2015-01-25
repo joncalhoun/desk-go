@@ -18,7 +18,7 @@ const (
 	apiURLSuffix       = ".desk.com/api/v2"
 	clientVersion      = "1.0.0"
 	defaultHTTPTimeout = 80 * time.Second
-	debug              = true
+	debug              = false
 )
 
 var Username string
