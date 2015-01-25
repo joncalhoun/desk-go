@@ -5,7 +5,7 @@ Go client for the Desk.com API
 ## Example usage
 
 ```go
-desk.Subdomain = "your-ubdomain"
+desk.Subdomain = "your-subdomain"
 desk.Username = "your@email.com"
 desk.Password = "your-password"
 
