@@ -3,6 +3,8 @@ package desk
 import (
 	"log"
 	"regexp"
+	"net/url"
+	"strconv"
 )
 
 var caseIdRegexp = regexp.MustCompile(".*/cases/([0-9]+)$")
@@ -15,6 +17,33 @@ type Case struct {
 	Message   *Message  `json:"message"`
 	Notes     []Note    `json:"notes"`
 	Replies   []Message `json:"replies"`
+}
+
+type CaseListParams struct {
+	Page, PerPage int
+	SortField, SortDirection string
+}
+
+func (c CaseListParams) UrlValues() *url.Values {
+	ret := &url.Values{}
+
+	if c.Page > 0 {
+		ret.Add("page", strconv.Itoa(c.Page))
+	}
+
+	if c.PerPage > 0 {
+		ret.Add("per_page", strconv.Itoa(c.PerPage))
+	}
+
+	if c.SortField != "" {
+		ret.Add("sort_field", c.SortField)
+	}
+
+	if c.SortDirection != "" {
+		ret.Add("sort_direction", c.SortDirection)
+	}
+
+	return ret
 }
 
 type RawCases struct {

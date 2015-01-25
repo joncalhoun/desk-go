@@ -14,14 +14,14 @@ func getC() Client {
 	return Client{desk.GetBackend(), desk.Subdomain, desk.Username, desk.Password}
 }
 
-func List(page, perPage int) ([]desk.Case, error) {
-	return getC().List(page, perPage)
+func List(params *desk.CaseListParams) ([]desk.Case, error) {
+	return getC().List(params)
 }
 
-func (c Client) List(page, perPage int) ([]desk.Case, error) {
+func (c Client) List(params *desk.CaseListParams) ([]desk.Case, error) {
 	rawCases := desk.RawCases{}
 	path := "/cases"
-	err := c.Call("GET", path, c.Subdomain, c.Username, c.Password, nil, &rawCases)
+	err := c.Call("GET", path, c.Subdomain, c.Username, c.Password, params.UrlValues(), &rawCases)
 	if err != nil {
 		return nil, err
 	}

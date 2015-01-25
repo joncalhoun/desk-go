@@ -115,7 +115,7 @@ func (bc Backend) NewRequest(method, path, subdomain, username, password string,
 
 	req.SetBasicAuth(username, password)
 
-	req.Header.Add("User-Agent", "Desk/v2 github.com/joncalhoun/desk/"+clientVersion)
+	req.Header.Add("User-Agent", "Desk/v2 github.com/joncalhoun/desk-go/"+clientVersion)
 	req.Header.Add("Content-Type", "application/json")
 	req.Header.Add("Accept", "application/json")
 

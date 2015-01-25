@@ -31,7 +31,20 @@ func main() {
 
     // Look up a list of cases, and get a []desk.Case. These will *not* have
     // their message, replies, or notes by default due to the design of Desk's API
-    cs, err := kase.List(1, 1)
+    ps := desk.CaseListParams{
+        // id, created_at, priority, received_at, status, updated_at. Defaults to created_at
+        SortField: "created_at",
+
+        // asc, desc. Defaults to asc
+        SortDirection: "desc",
+
+        // 1 - 500. Use Search() if you need higher pages. Defaults to 1
+        Page: 1,
+
+        // Limit not defined in API docs for Cases.
+        PerPage: 10,
+    }
+    cs, err := kase.List(&ps)
     if err != nil {
         panic(err)
     }
